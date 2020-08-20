@@ -1,0 +1,33 @@
+{
+  "name": "ethgaspricenotifier",
+  "version": "1.0.0",
+  "description": "send email when eth gas price drops by x%",
+  "main": "notifier.js",
+  "scripts": {
+    "test": "debug",
+    "debug": "node notifier.js | bunyan -l debug   ",
+    "start": "node notifier.js | bunyan -l info   "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miguel567/ethgaspricenotifier.git"
+  },
+  "keywords": [
+    "gas",
+    "eth",
+    "price"
+  ],
+  "author": "Miguel Cabeza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miguel567/ethgaspricenotifier/issues"
+  },
+  "homepage": "https://github.com/miguel567/ethgaspricenotifier#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bunyan": "^1.8.14",
+    "dotenv": "^8.2.0",
+    "moment": "^2.27.0",
+    "mysql2": "^2.1.0"
+  }
+}
