@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
 const result = dotenv.config();
 var bunyan = require('bunyan');
+var nodemailer = require('nodemailer');
  
 // create the logger
 var logger = bunyan.createLogger({
@@ -37,6 +38,15 @@ mysql.createConnection({
   
         } else {logger.error(err);}
     });
+
+
+
+//Mailer config
+var transporter = nodemailer.createTransport({
+    sendmail: true
+  });
+  console.log(transporter);
+  
 
 //Fetch Gas Price Data
 async function getGasPrice (conn){
@@ -79,11 +89,39 @@ async function getDrop(conn){
     if(rows.length != 0){
         logger.debug({rows0Standard:rows[0].standard, rows1Standard:rows[1].standard, rows0Blocknumber:rows[0].blocknumber, rows1Blocknumber:rows[1].blocknumber}, 'Rows contents');
         var gasdelta = (rows[1].standard / rows[0].standard) * 100;
-        logger.info('Standard GAS Delta in %:', gasdelta);
-
+        logger.info('Standard GAS Delta in %:', gasdelta, ' GAS Drop', gasdelta-100);
+        notify(gasdelta);
     }
+}
 
-
+function notify(delta, gasPriceData){
+    var mailOptions = {
+        from: process.env.email,
+        to: 'miguel567@gmail.com',
+        subject: 'GAS Price drop '+parseInt(delta-100)+'%',
+        text: gasPriceData
+      };
+    if(parseInt(delta-100) >= 0){
+        //send email
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              logger.error(error);
+            } else {
+              logger.info('Email sent: ' + info.response);
+            }
+          });
+    }else{
+    if(parseInt(delta-100) >= 30){
+        //send email
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              logger.error(error);
+            } else {
+              logger.info('Email sent: ' + info.response);
+            }
+          });
+    }
+    }
 }
 
 //Generate loop every X seconds to fetch data 
