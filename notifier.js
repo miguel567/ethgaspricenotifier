@@ -57,13 +57,35 @@ async function getGasPrice (conn){
       logger.info({Fast: gasPriceData.fast + gasPriceData.fastTime, Standard: gasPriceData.standard + gasPriceData.standardTime, Low: gasPriceData.low + gasPriceData.lowTime, Fastest: gasPriceData.fastest, BlockNumber: gasPriceData.blocknum, BlockTime: gasPriceData.blockTime, Speed: gasPriceData.speed});
       //Inser price in DB
       var now = moment().format('YYYY-MM-DD HH:mm:ss');
-      await conn.execute("INSERT INTO gasPrice (timestamp, blocknumber, fastest, fast, standard, low, blocktime, speed) VALUES (?,?,?,?,?,?,?,?)",[now,gasPriceData.blocknum,gasPriceData.fastest,gasPriceData.fast,gasPriceData.standard,gasPriceData.low,gasPriceData.blockTime,gasPriceData.speed]);
-      logger.debug({TIMESTAMP: now}, 'INSERTED in DB');
+      //avoid inserting in DB the gas price for the same block twice.
+      var [rows, fields] = await conn.execute("SELECT blocknumber FROM gasPrice WHERE blocknumber =?",[gasPriceData.blocknum]);
+      logger.debug({rowsLength: rows.length}, 'Entries in Select');
+
+      if(rows.length == 0){
+        await conn.execute("INSERT INTO gasPrice (timestamp, blocknumber, fastest, fast, standard, low, blocktime, speed) VALUES (?,?,?,?,?,?,?,?)",[now,gasPriceData.blocknum,gasPriceData.fastest,gasPriceData.fast,gasPriceData.standard,gasPriceData.low,gasPriceData.blockTime,gasPriceData.speed]);
+        logger.debug({TIMESTAMP: now}, 'INSERTED in DB');
+        getDrop(conn);
+      }
+
     } catch (error) {
         logger.error(error);
     }
   }
 
+async function getDrop(conn){
+    var [rows, fields] = await conn.execute("SELECT * FROM gasPrice ORDER BY blocknumber DESC LIMIT 2;");
+    logger.debug({rowsLength: rows.length}, 'Entries in Select');
+
+    if(rows.length != 0){
+        logger.debug({rows0Standard:rows[0].standard, rows1Standard:rows[1].standard, rows0Blocknumber:rows[0].blocknumber, rows1Blocknumber:rows[1].blocknumber}, 'Rows contents');
+        var gasdelta = (rows[1].standard / rows[0].standard) * 100;
+        logger.info('Standard GAS Delta in %:', gasdelta);
+
+    }
+
+
+}
+
 //Generate loop every X seconds to fetch data 
-var requestLoop = setInterval(function(){ getGasPrice(conn)}, 20000);
+var requestLoop = setInterval(function(){ getGasPrice(conn)}, 10000);
 
