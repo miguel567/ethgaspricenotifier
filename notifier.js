@@ -101,7 +101,8 @@ function notify(delta, gasPriceData){
         subject: 'GAS Price drop '+parseInt(delta-100)+'%',
         text: 'Fast:'+gasPriceData.fast+gasPriceData.fastTime+'\n'+'Standard:'+gasPriceData.standard+gasPriceData.standardTime+'\n'+'Low:'+gasPriceData.low+gasPriceData.lowTime+'\n'+'Blocknumber:'+gasPriceData.blocknum+'\n'+'Blocktime:'+gasPriceData.blockTime+'\n'+'Speed:'+gasPriceData.speed
       };
-    if(parseInt(delta-100) >= 00){
+    if(parseInt(delta-100) <= -50){
+        console.log('delta',parseInt(delta-100));
         //send email
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
@@ -111,7 +112,7 @@ function notify(delta, gasPriceData){
             }
           });
     }else{
-    if(parseInt(delta-100) >= 30){
+    if(parseInt(delta-100) <= -30){
         //send email
 
         transporter.sendMail(mailOptions, function(error, info){
