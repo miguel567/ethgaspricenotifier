@@ -99,7 +99,7 @@ function notify(delta, gasPriceData){
         from: process.env.email,
         to: 'miguel567@gmail.com',
         subject: 'GAS Price drop '+parseInt(delta-100)+'%',
-        text: JSON.stringify(gasPriceData)
+        text: 'Fast:'+gasPriceData.fast+gasPriceData.fastTime+'/n'+'Standard:'+gasPriceData.standard+gasPriceData.standardTime+'/n'+'Low:'+gasPriceData.low+gasPriceData.lowTime+'/n'+'Blocknumber:'+gasPriceData.blocknum+'/n'+'Blocktime:'+gasPriceData.blockTime+'/n'+'Speed:'+gasPriceData.speed
       };
     if(parseInt(delta-100) >= 00){
         //send email
