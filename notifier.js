@@ -99,9 +99,9 @@ function notify(delta, gasPriceData){
         from: process.env.email,
         to: 'miguel567@gmail.com',
         subject: 'GAS Price drop '+parseInt(delta-100)+'%',
-        text: gasPriceData
+        text: JSON.parse(gasPriceData)
       };
-    if(parseInt(delta-100) >= 50){
+    if(parseInt(delta-100) >= 00){
         //send email
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
