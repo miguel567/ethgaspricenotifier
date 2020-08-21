@@ -45,7 +45,7 @@ mysql.createConnection({
 var transporter = nodemailer.createTransport({
     sendmail: true
   });
-  console.log(transporter);
+  /* console.log(transporter); */
   
 
 //Fetch Gas Price Data

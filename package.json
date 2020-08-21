@@ -6,7 +6,7 @@
   "scripts": {
     "test": "debug",
     "debug": "node notifier.js | bunyan -l debug   ",
-    "start": "node notifier.js | bunyan -l info   "
+    "start": "node notifier.js | bunyan -o short -l info  "
   },
   "repository": {
     "type": "git",
