@@ -101,7 +101,7 @@ function notify(delta, gasPriceData){
         subject: 'GAS Price drop '+parseInt(delta-100)+'%',
         text: gasPriceData
       };
-    if(parseInt(delta-100) >= 0){
+    if(parseInt(delta-100) >= 50){
         //send email
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
