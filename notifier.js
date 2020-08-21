@@ -84,7 +84,7 @@ async function getGasPrice (conn){
 
 async function getDrop(conn){
     var [rows, fields] = await conn.execute("SELECT * FROM gasPrice ORDER BY blocknumber DESC LIMIT 2;");
-    logger.debug({rowsLength: rows.length}, 'Entries in Select');
+    logger.debug({rowsLength: rows.length}, 'Entries in GetDrop Select');
 
     if(rows.length != 0){
         logger.debug({rows0Standard:rows[0].standard, rows1Standard:rows[1].standard, rows0Blocknumber:rows[0].blocknumber, rows1Blocknumber:rows[1].blocknumber}, 'Rows contents');
