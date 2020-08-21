@@ -112,16 +112,28 @@ function notify(delta, gasPriceData){
             }
           });
     }else{
-    if(parseInt(delta-100) <= -30){
-        //send email
+        if(parseInt(delta-100) <= -30){
+            //send email
 
-        transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              logger.error(error);
-            } else {
-              logger.info('Email sent: ' + info.response);
-            }
-          });
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                logger.error(error);
+                } else {
+                logger.info('Email sent: ' + info.response);
+                }
+            });
+    }else{
+        if(parseInt(delta-100) <= -10){
+            //send email
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                logger.error(error);
+                } else {
+                logger.info('Email sent: ' + info.response);
+                }
+            });
+        }
     }
     }
 }
