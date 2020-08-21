@@ -113,6 +113,7 @@ function notify(delta, gasPriceData){
     }else{
     if(parseInt(delta-100) >= 30){
         //send email
+        
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
               logger.error(error);
