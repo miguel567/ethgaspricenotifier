@@ -74,7 +74,7 @@ async function getGasPrice (conn){
       if(rows.length == 0){
         await conn.execute("INSERT INTO gasPrice (timestamp, blocknumber, fastest, fast, standard, low, blocktime, speed) VALUES (?,?,?,?,?,?,?,?)",[now,gasPriceData.blocknum,gasPriceData.fastest,gasPriceData.fast,gasPriceData.standard,gasPriceData.low,gasPriceData.blockTime,gasPriceData.speed]);
         logger.debug({TIMESTAMP: now}, 'INSERTED in DB');
-        getDrop(conn);
+        getDrop(conn, gasPriceData);
       }
 
     } catch (error) {
@@ -82,7 +82,7 @@ async function getGasPrice (conn){
     }
   }
 
-async function getDrop(conn){
+async function getDrop(conn,gasPriceData){
     var [rows, fields] = await conn.execute("SELECT * FROM gasPrice ORDER BY blocknumber DESC LIMIT 2;");
     logger.debug({rowsLength: rows.length}, 'Entries in GetDrop Select');
 
@@ -90,7 +90,7 @@ async function getDrop(conn){
         logger.debug({rows0Standard:rows[0].standard, rows1Standard:rows[1].standard, rows0Blocknumber:rows[0].blocknumber, rows1Blocknumber:rows[1].blocknumber}, 'Rows contents');
         var gasdelta = (rows[1].standard / rows[0].standard) * 100;
         logger.info('Standard GAS Delta in %:', gasdelta, ' GAS Drop', gasdelta-100);
-        notify(gasdelta);
+        notify(gasdelta, gasPriceData);
     }
 }
 
@@ -99,7 +99,7 @@ function notify(delta, gasPriceData){
         from: process.env.email,
         to: 'miguel567@gmail.com',
         subject: 'GAS Price drop '+parseInt(delta-100)+'%',
-        text: JSON.parse(gasPriceData)
+        text: gasPriceData
       };
     if(parseInt(delta-100) >= 00){
         //send email
@@ -113,7 +113,7 @@ function notify(delta, gasPriceData){
     }else{
     if(parseInt(delta-100) >= 30){
         //send email
-        
+
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
               logger.error(error);
