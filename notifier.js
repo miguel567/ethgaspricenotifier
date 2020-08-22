@@ -1,8 +1,6 @@
 const moment = require('moment');
 const axios = require('axios');
 const mysql = require('mysql2/promise');
-const dotenv = require('dotenv');
-const result = dotenv.config();
 var bunyan = require('bunyan');
 var nodemailer = require('nodemailer');
  
