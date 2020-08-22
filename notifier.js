@@ -21,10 +21,6 @@ var logger = bunyan.createLogger({
     }] */
 });
 
-if (result.error) {
-  throw result.error;
-}
-
 
 // Connect to DB
 let conn;
