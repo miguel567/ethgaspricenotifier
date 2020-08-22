@@ -14,13 +14,13 @@ var logger = bunyan.createLogger({
             level: 'debug',
             stream: process.stdout            // log INFO and above to stdout
           }        
-    ],
+    ]/* ,
     streams: [{
         type: 'rotating-file',
         path: 'gasPrice.log',
         period: '1d',   // daily rotation
         count: 3        // keep 3 back copies
-    }]
+    }] */
 });
 
 if (result.error) {
