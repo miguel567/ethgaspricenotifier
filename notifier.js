@@ -57,7 +57,7 @@ var transporter = nodemailer.createTransport({
 //Fetch Gas Price Data
 async function getGasPrice (conn){
     try {
-      const response = await axios.get('https://data-api.defipulse.com/api/v1/egs/api/ethgasAPI.json?api-key=' + process.env.GASSTATION_API_KEY)
+        const response = await axios.get('https://ethgasstation.info/api/ethgasAPI.json?api-key=' + process.env.GASSTATION_API_KEY)
       var gasPriceData = {
           fastest: response.data.fastest/10,
           fast:  response.data.fast/10,
